@@ -7,3 +7,4 @@
 - install `cmake`: https://cmake.org/download/ (msi x64)
 - install a compiler: I use mingw's `i686-w64-mingw32/8.1.0` from http://mingw-w64.org/doku.php/download/mingw-builds
 - open the folder with Visual Studio, it should detect CMake automatically
+- right-click on CMakeLists.txt, then click "Debug" to run the project
