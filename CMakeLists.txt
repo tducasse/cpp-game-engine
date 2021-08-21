@@ -20,8 +20,11 @@ set(SDL_SHARED OFF CACHE BOOL "" FORCE)
 add_subdirectory(${SDL_DIR})
 
 
-file(GLOB sources ${APP_SOURCE_DIR}/*.cpp)
-add_executable(twng ${sources})
+add_executable(
+  twng
+  ${APP_SOURCE_DIR}/main.cpp
+  ${APP_SOURCE_DIR}/game/game.cpp
+)
 
 target_link_libraries(
   twng

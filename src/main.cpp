@@ -1,58 +1,33 @@
 #define SOL_ALL_SAFETIES_ON 1
-#define SDL_MAIN_HANDLED
 
+#include <iostream>
+#include "game/game.h"
 #include <sol/sol.hpp>
-#include <SDL.h>
-#include <stdio.h>
 
-//Screen dimension constants
-const int SCREEN_WIDTH = 640;
-const int SCREEN_HEIGHT = 480;
 
-int main()
+
+int main(int argc, char* argv[])
 {
-    printf("something");
-    sol::state lua;
-    lua.open_libraries(sol::lib::base);
-    lua.script("print('123')");
-    //The window we'll be rendering to
-    SDL_Window *window = NULL;
+	sol::state lua;
+	lua.open_libraries(sol::lib::base);
+	sol::protected_function_result result = lua.script_file("main.lua");
 
-    //The surface contained by the window
-    SDL_Surface *screenSurface = NULL;
+	sol::function update = lua["update"];
+	sol::function draw = lua["draw"];
+	sol::function init = lua["init"];
+	sol::function input = lua["input"];
 
-    //Initialize SDL
-    if (SDL_Init(SDL_INIT_VIDEO) < 0)
-    {
-        printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
-    }
-    else
-    {
-        //Create window
-        window = SDL_CreateWindow("SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
-        if (window == NULL)
-        {
-            printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
-        }
-        else
-        {
-            //Get window surface
-            screenSurface = SDL_GetWindowSurface(window);
+	Game game;
 
-            //Fill the surface white
-            SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
+	game.Init(init);
 
-            //Update the surface
-            SDL_UpdateWindowSurface(window);
+	while (game.IsRunning()) {
+		game.ProcessInput(input);
+		game.Update(update);
+		game.Draw(draw);
+	}
 
-            //Wait two seconds
-            SDL_Delay(2000);
-        }
-    } //Destroy window
-    SDL_DestroyWindow(window);
+	game.Destroy();
 
-    //Quit SDL subsystems
-    SDL_Quit();
-
-    return 0;
+	return 0;
 }
