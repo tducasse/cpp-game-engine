@@ -27,10 +27,11 @@ bool Game::IsRunning() const {
 }
 
 void Game::Init() {
-	if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
-		std::cerr << "Error initializing SDL" << std::endl;
+	if (SDL_Init(SDL_INIT_EVERYTHING & ~(SDL_INIT_SENSOR | SDL_INIT_HAPTIC)) != 0) {
+		std::cerr << "Error initializing SDL : " << SDL_GetError() << std::endl;
 		return;
 	}
+
 	window = SDL_CreateWindow(
 		NULL,
 		SDL_WINDOWPOS_CENTERED,

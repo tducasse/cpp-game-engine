@@ -1,5 +1,6 @@
 #define SOL_ALL_SAFETIES_ON 1
 
+
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>
 #endif
@@ -15,7 +16,7 @@ int main(int argc, char* argv[])
 {
 	sol::state lua;
 	lua.open_libraries(sol::lib::base);
-	sol::protected_function_result result = lua.script_file("main.lua");
+	sol::protected_function_result result = lua.script_file("lua/main.lua");
 
 
 	sol::function init = lua["init"];
@@ -50,6 +51,11 @@ void MainLoop(void* arg) {
 	if (!game.IsRunning()) {
 		quit = true;
 	}
+#ifdef __EMSCRIPTEN__
+	if (quit) {
+		emscripten_cancel_main_loop();
+	}
+#endif
 }
 
 

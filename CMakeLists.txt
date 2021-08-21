@@ -47,15 +47,22 @@ target_include_directories(
 
 if(EMSCRIPTEN) 
 
+ add_custom_command(
+    TARGET ${PROJECT_NAME}
+    PRE_LINK COMMAND ${CMAKE_COMMAND}
+    -E create_symlink
+    ${PROJECT_SOURCE_DIR}/lua
+    ${PROJECT_BINARY_DIR}/lua
+  )
 
   target_link_libraries(
     ${PROJECT_NAME} PRIVATE
     lua
     "-s USE_SDL=2"
-    "-s USE_WEBGL2=1"
+    "--preload-file lua/"
   )
 
-  set(CMAKE_EXECUTABLE_SUFFIX ".html")
+   set(CMAKE_EXECUTABLE_SUFFIX ".html")
 
 else()
 
@@ -68,10 +75,10 @@ else()
 
   add_custom_command(
     TARGET ${PROJECT_NAME}
-    POST_BUILD COMMAND ${CMAKE_COMMAND}
+    PRE_LINK COMMAND ${CMAKE_COMMAND}
     -E create_symlink
-    ${PROJECT_SOURCE_DIR}/lua/main.lua
-    ${PROJECT_BINARY_DIR}/main.lua
+    ${PROJECT_SOURCE_DIR}/lua
+    ${PROJECT_BINARY_DIR}/lua
   )
 
 endif()

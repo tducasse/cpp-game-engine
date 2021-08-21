@@ -6,7 +6,7 @@
 - `git submodule update --init`
 - open the folder with Visual Studio, it should detect CMake automatically
 - right-click on CMakeLists.txt, then click "Debug" to run the project
-- the file in `lua/main.lua` is symlinked alongside the compiled executable, so modify this one and it should be fine
+- the `lua` folder, which contains `main.lua`, is symlinked alongside the compiled executable, so modify `main.lua` and it should be fine
 
 ## Compiling a web version
 ### Prerequisites
@@ -41,3 +41,11 @@ cmake --build web-build
 ```
 Since WASM is only possible when files are served from a server, run `python -m http.server` (in another terminal) to quickly serve your files, and navigate to [localhost:8000](http://localhost:8000) to test it.
 
+
+### Recompiling later
+```sh
+# reactivate the environment
+externals\emsdk\emsdk_env.bat
+# recompile the sources
+cmake --build web-build
+```

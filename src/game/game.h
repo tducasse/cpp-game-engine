@@ -1,6 +1,12 @@
 #ifndef GAME_H
 #define GAME_H
+
+#ifdef __EMSCRIPTEN__
+#include <SDL2/SDL.h>
+#else
 #include <SDL.h>
+#endif
+
 #include <sol/sol.hpp>
 
 
