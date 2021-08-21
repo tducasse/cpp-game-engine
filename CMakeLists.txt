@@ -38,3 +38,11 @@ target_include_directories(
   PRIVATE ${EXTERNALS_DIR}
   PRIVATE ${LUA_DIR}
 )
+
+add_custom_command(
+  TARGET ${PROJECT_NAME}
+  POST_BUILD COMMAND ${CMAKE_COMMAND}
+  -E create_symlink
+  ${PROJECT_SOURCE_DIR}/lua/main.lua
+  ${PROJECT_BINARY_DIR}/main.lua
+)
