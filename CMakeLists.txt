@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.18) 
 
 project(twng)
+
 set(CMAKE_CXX_STANDARD 17)
 
 set(APP_SOURCE_DIR "${PROJECT_SOURCE_DIR}/src")
@@ -9,15 +10,26 @@ set(LUA_DIR "${EXTERNALS_DIR}/lua")
 set(SDL_DIR "${EXTERNALS_DIR}/sdl")
 set(SOL_DIR "${EXTERNALS_DIR}/sol")
 
+if(EMSCRIPTEN)
+
+ message(STATUS "Building for web")
+
+ else()
+
+  message(STATUS "Building for desktop")
+
+  set(SDL_STATIC ON CACHE BOOL "" FORCE)
+  set(SDL_SHARED OFF CACHE BOOL "" FORCE)
+  add_subdirectory(${SDL_DIR})
+
+endif()
+
+
 add_library (
   lua STATIC
   ${LUA_DIR}/onelua.c 
 )
 target_compile_definitions(lua PRIVATE MAKE_LIB)
-
-set(SDL_STATIC ON CACHE BOOL "" FORCE)
-set(SDL_SHARED OFF CACHE BOOL "" FORCE)
-add_subdirectory(${SDL_DIR})
 
 
 add_executable(
@@ -26,23 +38,41 @@ add_executable(
   ${APP_SOURCE_DIR}/game/game.cpp
 )
 
-target_link_libraries(
-  twng
-  PRIVATE lua
-  SDL2main
-  SDL2-static
-)
-
 target_include_directories(
   twng
   PRIVATE ${EXTERNALS_DIR}
   PRIVATE ${LUA_DIR}
 )
 
-add_custom_command(
-  TARGET ${PROJECT_NAME}
-  POST_BUILD COMMAND ${CMAKE_COMMAND}
-  -E create_symlink
-  ${PROJECT_SOURCE_DIR}/lua/main.lua
-  ${PROJECT_BINARY_DIR}/main.lua
-)
+
+if(EMSCRIPTEN) 
+
+
+  target_link_libraries(
+    ${PROJECT_NAME} PRIVATE
+    lua
+    "-s USE_SDL=2"
+    "-s USE_WEBGL2=1"
+  )
+
+  set(CMAKE_EXECUTABLE_SUFFIX ".html")
+
+else()
+
+  target_link_libraries(
+    ${PROJECT_NAME}
+	PRIVATE lua
+	SDL2main
+	SDL2-static
+  )
+
+  add_custom_command(
+    TARGET ${PROJECT_NAME}
+    POST_BUILD COMMAND ${CMAKE_COMMAND}
+    -E create_symlink
+    ${PROJECT_SOURCE_DIR}/lua/main.lua
+    ${PROJECT_BINARY_DIR}/main.lua
+  )
+
+endif()
+

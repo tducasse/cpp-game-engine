@@ -1,6 +1,5 @@
 #ifndef GAME_H
 #define GAME_H
-
 #include <SDL.h>
 #include <sol/sol.hpp>
 
@@ -17,16 +16,21 @@ private:
 	static int r;
 	static int g;
 	static int b;
-	 static int a;
+	static int a;
 	void ChangeColor();
+	sol::function init;
+	sol::function input;
+	sol::function update;
+	sol::function draw;
+
 
 public:
-	Game();
+	Game(sol::function init, sol::function input, sol::function update, sol::function draw);
 	~Game();
-	void Init(sol::function);
-	void ProcessInput(sol::function);
-	void Update(sol::function);
-	void Draw(sol::function);
+	void Init();
+	void ProcessInput();
+	void Update();
+	void Draw();
 	void Destroy();
 	bool IsRunning() const;
 

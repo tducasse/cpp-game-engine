@@ -8,23 +8,25 @@ int Game::g = 100;
 int Game::b = 100;
 int Game::a = 255;
 
-Game::Game() {
-	SDL_Log("Constructor invoked");
+Game::Game(sol::function init, sol::function input, sol::function update, sol::function draw) {
 	isRunning = false;
 	window = NULL;
 	renderer = NULL;
 	ticksPreviousFrame = 0;
+	this->init = init;
+	this->update = update;
+	this->draw = draw;
+	this->input = input;
 }
 
 Game::~Game() {
-	SDL_Log("Destructor invoked");
 }
 
 bool Game::IsRunning() const {
 	return isRunning;
 }
 
-void Game::Init(sol::function init) {
+void Game::Init() {
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
 		std::cerr << "Error initializing SDL" << std::endl;
 		return;
@@ -54,7 +56,7 @@ void Game::Init(sol::function init) {
 }
 
 
-void Game::ProcessInput(sol::function input) {
+void Game::ProcessInput() {
 	SDL_Event sdlEvent;
 	while (SDL_PollEvent(&sdlEvent)) {
 		switch (sdlEvent.type) {
@@ -73,7 +75,7 @@ void Game::ProcessInput(sol::function input) {
 	}
 }
 
-void Game::Update(sol::function update) {
+void Game::Update() {
 	int timeToWait = MILLISECS_PER_FRAME - (SDL_GetTicks() - ticksPreviousFrame);
 	if (timeToWait > 0 && timeToWait <= MILLISECS_PER_FRAME) {
 		SDL_Delay(timeToWait);
@@ -87,7 +89,7 @@ void Game::Update(sol::function update) {
 	return;
 }
 
-void Game::Draw(sol::function draw) {
+void Game::Draw() {
 	SDL_SetRenderDrawColor(renderer, r, g, b, a);
 	SDL_RenderClear(renderer);
 

@@ -4,3 +4,6 @@
 [submodule "externals/sdl"]
 	path = externals/sdl
 	url = https://github.com/libsdl-org/SDL.git
+[submodule "externals/emsdk"]
+	path = externals/emsdk
+	url = https://github.com/emscripten-core/emsdk.git
