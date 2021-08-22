@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.18)
 
 project(twng)
 
+
 set(CMAKE_CXX_STANDARD 17)
 
 set(APP_SOURCE_DIR "${PROJECT_SOURCE_DIR}/src")
@@ -28,6 +29,7 @@ add_library (
   lua STATIC
   ${LUA_DIR}/onelua.c 
 )
+
 target_compile_definitions(lua PRIVATE MAKE_LIB)
 
 
@@ -46,19 +48,12 @@ target_include_directories(
 
 if(EMSCRIPTEN) 
 
- add_custom_command(
-    TARGET ${PROJECT_NAME}
-    PRE_LINK COMMAND ${CMAKE_COMMAND}
-    -E create_symlink
-    ${PROJECT_SOURCE_DIR}/lua
-    ${PROJECT_BINARY_DIR}/lua
-  )
-
   target_link_libraries(
     ${PROJECT_NAME} PRIVATE
     lua
     "-s USE_SDL=2"
-    "--preload-file lua/"
+    "--preload-file scripts/"
+    "--preload-file images/"
   )
 
    set(CMAKE_EXECUTABLE_SUFFIX ".html")
@@ -71,14 +66,23 @@ else()
 	SDL2main
 	SDL2-static
   )
+endif()
 
   add_custom_command(
     TARGET ${PROJECT_NAME}
     PRE_LINK COMMAND ${CMAKE_COMMAND}
     -E create_symlink
-    ${PROJECT_SOURCE_DIR}/lua
-    ${PROJECT_BINARY_DIR}/lua
+    ${PROJECT_SOURCE_DIR}/sample/scripts
+    ${PROJECT_BINARY_DIR}/scripts
   )
 
-endif()
+  add_custom_command(
+    TARGET ${PROJECT_NAME}
+    PRE_LINK COMMAND ${CMAKE_COMMAND}
+    -E create_symlink
+    ${PROJECT_SOURCE_DIR}/sample/images
+    ${PROJECT_BINARY_DIR}/images
+  )
+
+
 

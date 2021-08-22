@@ -1,8 +1,12 @@
+#define SOL_ALL_SAFETIES_ON 1
+
 extern "C" {
 #include <lua/lua.h>
 #include <lua/lauxlib.h>
 #include <lua/lualib.h>
 }
+
+
 #include <sol/sol.hpp>
 
 #ifdef __EMSCRIPTEN__
@@ -15,19 +19,28 @@ extern "C" {
 bool quit = false;
 void MainLoop(void*);
 
+
 int main(int argc, char* argv[])
 {
 	sol::state lua;
 	lua.open_libraries(sol::lib::base);
-	sol::protected_function_result result = lua.script_file("lua/main.lua");
+
+	sol::table twng = lua.create_table("twng");
+
+	Game game;
+
+	twng.set_function("draw_image", &Game::DrawImage, game);
+
+	lua.script_file("scripts/main.lua");
+
+	sol::function init = lua["twng"]["init"];
+	sol::function input = lua["twng"]["input"];
+	sol::function update = lua["twng"]["update"];
+	sol::function draw = lua["twng"]["draw"];
 
 
-	sol::function init = lua["init"];
-	sol::function input = lua["input"];
-	sol::function update = lua["update"];
-	sol::function draw = lua["draw"];
+	game.SetCallbacks(init, input, update, draw);
 
-	Game game = Game(init, input, update, draw);
 
 	game.Init();
 

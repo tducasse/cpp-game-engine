@@ -49,3 +49,10 @@ externals\emsdk\emsdk_env.bat
 # recompile the sources
 cmake --build web-build
 ```
+
+## Externals
+- Lua, as a submodule, will be built from source and compiled to a static lib
+- SDL, as a submodule, will be build from source and compiled to a static lib
+- Sol, as a single header
+- emsdk, as a submodule
+- sdl_image, devel dlls for VC

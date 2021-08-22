@@ -14,6 +14,7 @@
 inline constexpr unsigned int FPS = 60;
 inline constexpr unsigned int MILLISECS_PER_FRAME = 1000 / FPS;
 
+
 class Game {
 private:
 	bool isRunning;
@@ -33,6 +34,7 @@ private:
 
 public:
 	Game(sol::function init, sol::function input, sol::function update, sol::function draw);
+	Game();
 	~Game();
 	void Init();
 	void ProcessInput();
@@ -41,8 +43,13 @@ public:
 	void Destroy();
 	bool IsRunning() const;
 
+	void DrawImage(std::string);
+
+	void SetCallbacks(sol::function init, sol::function input, sol::function update, sol::function draw);
+
 	static int windowWidth;
 	static int windowHeight;
 };
+
 
 #endif

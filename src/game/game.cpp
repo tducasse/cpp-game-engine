@@ -19,6 +19,20 @@ Game::Game(sol::function init, sol::function input, sol::function update, sol::f
 	this->input = input;
 }
 
+void Game::SetCallbacks(sol::function init, sol::function input, sol::function update, sol::function draw) {
+	this->init = init;
+	this->update = update;
+	this->draw = draw;
+	this->input = input;
+}
+
+Game::Game() {
+	isRunning = false;
+	window = NULL;
+	renderer = NULL;
+	ticksPreviousFrame = 0;
+}
+
 Game::~Game() {
 }
 
@@ -49,9 +63,17 @@ void Game::Init() {
 		std::cerr << "Error creating SDL renderer." << std::endl;
 		return;
 	}
+
 	isRunning = true;
 
-	init();
+	if (init) {
+		auto result = init();
+		if (!result.valid()) {
+			sol::error err = result;
+			std::cout << "An error occurred: " << err.what() << std::endl;
+		}
+	}
+
 
 	return;
 }
@@ -71,7 +93,13 @@ void Game::ProcessInput() {
 
 		}
 
-		input(sdlEvent);
+		if (input) {
+			auto result = input(sdlEvent);
+			if (!result.valid()) {
+				sol::error err = result;
+				std::cout << "An error occurred: " << err.what() << std::endl;
+			}
+		}
 
 	}
 }
@@ -85,17 +113,50 @@ void Game::Update() {
 	deltaTime = (deltaTime > 0.05f) ? 0.05f : deltaTime;
 	ticksPreviousFrame = SDL_GetTicks();
 
-	update(deltaTime);
+	if (update) {
+		auto result = update(deltaTime);
+		if (!result.valid()) {
+			sol::error err = result;
+			std::cout << "An error occurred: " << err.what() << std::endl;
+		}
+	}
+
 
 	return;
+}
+
+
+void Game::DrawImage(std::string path) {
+	SDL_Surface* surface = SDL_LoadBMP(path.c_str());
+	if (surface == NULL) {
+		std::cout << "An error occurred: " << SDL_GetError() << std::endl;
+	}
+
+
+	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+	if (texture == NULL) {
+		std::cout << "An error occurred: " << SDL_GetError() << std::endl;
+	}
+
+	SDL_RenderCopy(renderer, texture, NULL, NULL);
+	SDL_FreeSurface(surface);
 }
 
 void Game::Draw() {
 	SDL_SetRenderDrawColor(renderer, r, g, b, a);
 	SDL_RenderClear(renderer);
+	puts("this is before draw");
+	puts(renderer == NULL ? "invalid" : "valid");
 
-	draw();
+	if (draw) {
+		auto result = draw();
+		if (!result.valid()) {
+			sol::error err = result;
+			std::cout << "An error occurred: " << err.what() << std::endl;
+		}
+	}
 
+	puts("this is after draw");
 	SDL_RenderPresent(renderer);
 
 	return;
