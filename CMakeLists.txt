@@ -24,7 +24,6 @@ if(EMSCRIPTEN)
 
 endif()
 
-
 add_library (
   lua STATIC
   ${LUA_DIR}/onelua.c 

@@ -1,5 +1,9 @@
-#define SOL_ALL_SAFETIES_ON 1
-
+extern "C" {
+#include <lua/lua.h>
+#include <lua/lauxlib.h>
+#include <lua/lualib.h>
+}
+#include <sol/sol.hpp>
 
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>
@@ -7,7 +11,6 @@
 
 #include <iostream>
 #include "game/game.h"
-#include <sol/sol.hpp>
 
 bool quit = false;
 void MainLoop(void*);

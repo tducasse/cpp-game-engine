@@ -1,13 +1,14 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include <sol/sol.hpp>
+
 #ifdef __EMSCRIPTEN__
 #include <SDL2/SDL.h>
 #else
 #include <SDL.h>
 #endif
 
-#include <sol/sol.hpp>
 
 
 inline constexpr unsigned int FPS = 60;
