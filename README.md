@@ -1,12 +1,16 @@
-# TWNG
+# Game Engine
+
+Just a sample game engine - mostly as a learning experiment.
+Built in C++ on top of SDL, scriptable in Lua through Sol2 bindings. Cross platform thanks to CMake, and compiles to wasm and js via emscripten.
+
 
 ## Work on it
 - `git clone REPO`
-- `cd twng`
+- `cd game_engine`
 - `git submodule update --init`
 - open the folder with Visual Studio, it should detect CMake automatically
 - right-click on CMakeLists.txt, then click "Debug" to run the project
-- the `lua` folder, which contains `main.lua`, is symlinked alongside the compiled executable, so modify `main.lua` and it should be fine
+- the `sample` folder, which contains a test game, is symlinked alongside the compiled executable, so modify `main.lua` and it should run be fine
 
 ## Compiling a web version
 ### Prerequisites
@@ -55,4 +59,3 @@ cmake --build web-build
 - SDL, as a submodule, will be build from source and compiled to a static lib
 - Sol, as a single header
 - emsdk, as a submodule
-- sdl_image, devel dlls for VC

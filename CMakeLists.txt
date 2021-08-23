@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.18) 
 
-project(twng)
+project(game_engine)
 
 
 set(CMAKE_CXX_STANDARD 17)
@@ -34,13 +34,13 @@ target_compile_definitions(lua PRIVATE MAKE_LIB)
 
 
 add_executable(
-  twng
+  ${PROJECT_NAME}
   ${APP_SOURCE_DIR}/main.cpp
   ${APP_SOURCE_DIR}/game/game.cpp
 )
 
 target_include_directories(
-  twng
+  ${PROJECT_NAME}
   PRIVATE ${EXTERNALS_DIR}
   PRIVATE ${LUA_DIR}
 )

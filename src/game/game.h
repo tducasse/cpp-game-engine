@@ -43,7 +43,7 @@ public:
 	void Destroy();
 	bool IsRunning() const;
 
-	void DrawImage(std::string);
+	void DrawImage(Game* game, std::string);
 
 	void SetCallbacks(sol::function init, sol::function input, sol::function update, sol::function draw);
 

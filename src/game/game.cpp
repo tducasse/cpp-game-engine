@@ -126,37 +126,34 @@ void Game::Update() {
 }
 
 
-void Game::DrawImage(std::string path) {
+void Game::DrawImage(Game* game, std::string path) {
 	SDL_Surface* surface = SDL_LoadBMP(path.c_str());
 	if (surface == NULL) {
 		std::cout << "An error occurred: " << SDL_GetError() << std::endl;
 	}
 
 
-	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+	SDL_Texture* texture = SDL_CreateTextureFromSurface(game->renderer, surface);
 	if (texture == NULL) {
 		std::cout << "An error occurred: " << SDL_GetError() << std::endl;
 	}
 
-	SDL_RenderCopy(renderer, texture, NULL, NULL);
+	SDL_RenderCopy(game->renderer, texture, NULL, NULL);
 	SDL_FreeSurface(surface);
 }
 
 void Game::Draw() {
 	SDL_SetRenderDrawColor(renderer, r, g, b, a);
 	SDL_RenderClear(renderer);
-	puts("this is before draw");
-	puts(renderer == NULL ? "invalid" : "valid");
 
 	if (draw) {
-		auto result = draw();
+		auto result = draw(this);
 		if (!result.valid()) {
 			sol::error err = result;
 			std::cout << "An error occurred: " << err.what() << std::endl;
 		}
 	}
 
-	puts("this is after draw");
 	SDL_RenderPresent(renderer);
 
 	return;

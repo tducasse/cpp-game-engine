@@ -1,5 +1,4 @@
-function twng.draw()
-	print("this is inside twng.draw")
+function engine.draw(game)
 	local image = "images/test.bmp"
-	twng.draw_image(image)
+	engine.draw_image(game, image)
 end
