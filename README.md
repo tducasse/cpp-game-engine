@@ -10,7 +10,7 @@ Built in C++ on top of SDL, scriptable in Lua through Sol2 bindings. Cross platf
 - `git submodule update --init`
 - open the folder with Visual Studio, it should detect CMake automatically
 - right-click on CMakeLists.txt, then click "Debug" to run the project
-- the `sample` folder, which contains a test game, is symlinked alongside the compiled executable, so modify `main.lua` and it should run be fine
+- the `sample` folder, which contains a test game, is symlinked alongside the compiled executable, so modify `main.lua` and it should be fine
 
 ## Compiling a web version
 ### Prerequisites
