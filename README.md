@@ -1,4 +1,4 @@
-# Game Engine
+# cpp-game-engine
 
 Just a sample game engine - mostly as a learning experiment.
 Built in C++ on top of SDL, scriptable in Lua through Sol2 bindings. Cross platform thanks to CMake, and compiles to wasm and js via emscripten.
